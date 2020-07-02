@@ -12,9 +12,17 @@ script:
         - ./script/latest.py
         - ./script/prepare.sh
 
+before_deploy:
+  # Set up git user name and tag this commit
+      - git config --local user.name "Marek5050"
+      - git config --local user.email "marek.bejda@gmail.com"
+      - export TRAVIS_TAG=`ls | grep *.mdb`
+      - git tag $TRAVIS_TAG
+
 deploy:
   provider: releases
   api_key:
     secure: "PcPhc6rxZY9YWhomnUQjhWjxSqUf7hGP16ern57tK8iNRMcBI7/7tv47txSzjnQcsMgW4Ru2Xph6kbfTeM/nG29+G+XfAJLIX5+1LXKRdsz2bytaL0nDQ1egQBl4XKtKWifdz4+PGH462hIr0Pfb/CcG7twabbHN5nYVvp/bjU68QxgavYcYRLYHGmdGVQcvAwiBXD5XuqbJhyt0viF5wf7OvpyK32C51c/55N3bUNPIa6yCyPJvCM3DLe+5mxWiCMfgw/Ok7u6vqBMu7mejUUAXuEsMkj33uEV5HTS5eOxmmuQHoC5ulkz9BqtfVOMqR+I2RNS3wJSiBUwyFvMWFhIfEUQlo8OpX0HD/38tcCwSVGsa8Oi8CZ5w+iKWkUXBlfHf0fuxoLvrRH39ye7u4gdtT66cRjyv/ofyzmdO4PVlnC4wEoClzq1S5nDa+MPWJNhqbJlzQsA24l/kTX5fzEHzcwjSsAPd3zlZ7NmdusFuQmn9Xc8dPmnpa6r/m2JtIUl9Buw9IZFQOiG9fiFuWAyiZfnsPixZ1s6PN1bUa1kH8jt/zYvmFdmRAajm/RNQOueoQ0Um0uLGQ1EEfgTEyizEgS6kDU3BLFeKzNaOUaSXKaHnVpBRnzcu8ZFS6MaqTLqebGsZjBod69lnTTYMz9w14JoXLhaSnYoNK+crhAM="
-  file: "data/*"
+  file_glob: true
+  file: data/*
   skip_cleanup: true
