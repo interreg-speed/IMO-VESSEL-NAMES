@@ -2,13 +2,7 @@ language: python
 python:
   - "3.7"
 
-before_install:
-  - sudo apt-get update -y
-  - sudo apt-get install  mdbtools gawk -y
-
 script:
-        - ./script/latest-unlocode.py
-        - ./script/prepare.sh
         - ./script/latest-smdg.py
 
 before_deploy:
@@ -21,7 +15,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: "PcPhc6rxZY9YWhomnUQjhWjxSqUf7hGP16ern57tK8iNRMcBI7/7tv47txSzjnQcsMgW4Ru2Xph6kbfTeM/nG29+G+XfAJLIX5+1LXKRdsz2bytaL0nDQ1egQBl4XKtKWifdz4+PGH462hIr0Pfb/CcG7twabbHN5nYVvp/bjU68QxgavYcYRLYHGmdGVQcvAwiBXD5XuqbJhyt0viF5wf7OvpyK32C51c/55N3bUNPIa6yCyPJvCM3DLe+5mxWiCMfgw/Ok7u6vqBMu7mejUUAXuEsMkj33uEV5HTS5eOxmmuQHoC5ulkz9BqtfVOMqR+I2RNS3wJSiBUwyFvMWFhIfEUQlo8OpX0HD/38tcCwSVGsa8Oi8CZ5w+iKWkUXBlfHf0fuxoLvrRH39ye7u4gdtT66cRjyv/ofyzmdO4PVlnC4wEoClzq1S5nDa+MPWJNhqbJlzQsA24l/kTX5fzEHzcwjSsAPd3zlZ7NmdusFuQmn9Xc8dPmnpa6r/m2JtIUl9Buw9IZFQOiG9fiFuWAyiZfnsPixZ1s6PN1bUa1kH8jt/zYvmFdmRAajm/RNQOueoQ0Um0uLGQ1EEfgTEyizEgS6kDU3BLFeKzNaOUaSXKaHnVpBRnzcu8ZFS6MaqTLqebGsZjBod69lnTTYMz9w14JoXLhaSnYoNK+crhAM="
+    secure: "IJS87NWwxN6P46N+MDAZ4J6Bpy9AmJMKQxfmYFBYLUW6HPQLP/15wZeWnnkvNQp5RhZMA7PFn38aWHV3kgQzqv1usSORKBbbzqI06Nm2LZIBDYa+lprkbnlc+Kpsv91Ko+OLP21b7coNHnHg/pG1iK9xUeq7zfpCIDFAiFd/x4BDuyCSxPsndd+SwVtsI4WWUc4Pveg5fSWmFc84/ws/J+b+JUGVrkf3kRp+38fWyQ67XRv+fjFnvmYsV0xbkkgAzF2wYCd/RXkKy+B66w7R9NJYXXQ9yEtxf2kgedntCzIR880j/X/WpVyJBioqOmZij41NMIOyUTYVq7Nf4K+hvWWsqyBnoCsXySkT2qerhPMhnfE/eOx2slxxLVF4jhfJSHlKct88+DsI5hr9wxCo0yA61EKW3snrD2w9zK9TndSpf56S3zOTidEEKGrSHjcph2YJuRbDH35sgLADRaQtxRWoDeZ3AsBiza4MViKNgL4a2PKGffvzCJkq1EljQcmExZsyju+qIu2irn7o7Y4QvMZ0TNdRFGU0zNzKZgSFn6PmxoHdMV6zmTkN+sD0nmS+yXG+FRjDIRwgDitgETP65uuFIKJTdmSGTSzUkvo9xkuC7TviJYI4s+Ytg1SxQbX+g1UH8tuT0nryLpzskl7hI5ara8JS0GXG5F9Ds58q9rE="
   file_glob: true
   file: data/*
   skip_cleanup: true
