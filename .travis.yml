@@ -7,8 +7,9 @@ before_install:
   - sudo apt-get install  mdbtools gawk -y
 
 script:
-        - ./script/latest.py
+        - ./script/latest-unlocode.py
         - ./script/prepare.sh
+        - ./script/latest-smdg.py
 
 before_deploy:
       # Set up git user name and tag this commit
