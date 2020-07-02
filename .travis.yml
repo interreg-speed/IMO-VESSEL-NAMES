@@ -11,14 +11,14 @@ before_install:
 script:
         - ./script/latest.py
         - ./script/prepare.sh
+        - `ls | grep *.mdb`
 
 before_deploy:
-  # Set up git user name and tag this commit
+      # Set up git user name and tag this commit
       - git config --local user.name "Marek5050"
       - git config --local user.email "marek.bejda@gmail.com"
-      - export TRAVIS_TAG=`ls | grep *.mdb`
-      - echo $TRAVIS_TAG
-      - git tag "$TRAVIS_TAG"
+      - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+      - git tag $TRAVIS_TAG
 
 deploy:
   provider: releases
