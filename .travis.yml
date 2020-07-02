@@ -4,7 +4,7 @@ python:
 
 before_install:
   - sudo apt-get update -y
-  - sudo apt-get install csvclean mdbtools gawk -y
+  - sudo apt-get install  csvkit mdbtools gawk -y
 
 script:
         - ./script/latest.py
