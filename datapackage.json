@@ -1,0 +1,189 @@
+{
+  "name": "un-locode",
+  "title": "UN-LOCODE Codelist",
+  "version": "2020.1.0",
+  "licenses": [
+    {
+      "name": "ODC-PDDL-1.0",
+      "path": "http://opendatacommons.org/licenses/pddl/",
+      "title": "Open Data Commons Public Domain Dedication and License v1.0"
+    }
+  ],
+  "sources": [
+    {
+      "name": "UNECE",
+      "path": "http://www.unece.org/cefact/locode/welcome.html",
+      "title": "UNECE"
+    }
+  ],
+  "resources": [
+    {
+      "path": "data/code-list.csv",
+      "name": "code-list",
+      "mediatype": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "Change",
+            "type": "string",
+            "description": "+ (newly added); X (to be removed); | (changed); # (name changed); = (reference entry); ! (US location with duplicate IATA code)"
+          },
+          {
+            "name": "Country",
+            "type": "string",
+            "description": "ISO 3166 alpha-2 Country Code, defined in countryCodes.csv",
+            "pattern": "[A-Z]{2}"
+          },
+          {
+            "name": "Location",
+            "type": "string",
+            "pattern": "[A-Z2-9]{3}"
+          },
+          {
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "name": "NameWoDiacritics",
+            "type": "string"
+          },
+          {
+            "name": "Subdivision",
+            "type": "string",
+            "description": "Defined in subdivisionCodes.csv"
+          },
+          {
+            "name": "Status",
+            "type": "string",
+            "description": "Defined in statusIndicators.csv"
+          },
+          {
+            "name": "Function",
+            "type": "string",
+            "description": "Defined in functionClassifiers.csv",
+            "pattern": "[01-][2-][3-][4-][5-][6-][7-][B-]"
+          },
+          {
+            "name": "Date",
+            "type": "string",
+            "description": "ym",
+            "pattern": "[0-9]{4}"
+          },
+          {
+            "name": "IATA",
+            "type": "string",
+            "description": "IATA code if different from LOCODE"
+          },
+          {
+            "name": "Coordinates",
+            "type": "string",
+            "description": "DDMM[N/S] DDDMM[W/E]",
+            "pattern": "[0-9]{4}[NS] [0-9]{5}[WE]"
+          },
+          {
+            "name": "Remarks",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "data/country-codes.csv",
+      "name": "country-codes",
+      "mediatype": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "CountryCode",
+            "type": "string"
+          },
+          {
+            "name": "CountryName",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "data/function-classifiers.csv",
+      "name": "function-classifiers",
+      "mediatype": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "FunctionCode",
+            "type": "string"
+          },
+          {
+            "name": "FunctionDescription",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "data/status-indicators.csv",
+      "name": "status-indicators",
+      "mediatype": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "STStatus",
+            "type": "string"
+          },
+          {
+            "name": "STDescription",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "path": "data/subdivision-codes.csv",
+      "name": "subdivision-codes",
+      "mediatype": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "SUCountry",
+            "type": "string"
+          },
+          {
+            "name": "SUCode",
+            "type": "string"
+          },
+          {
+            "name": "SUName",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "related": [
+    {
+      "title": "Country list",
+      "path": "/core/country-list",
+      "publisher": "core",
+      "formats": ["CSV", "JSON"]
+    },
+    {
+      "title": "Country codes",
+      "path": "/core/country-codes",
+      "publisher": "core",
+      "formats": ["CSV", "JSON"]
+    },
+    {
+      "title": "Airport codes",
+      "path": "/core/airport-codes",
+      "publisher": "core",
+      "formats": ["CSV", "JSON"]
+    },
+    {
+      "title": "Language codes",
+      "path": "/core/language-codes",
+      "publisher": "core",
+      "formats": ["CSV", "JSON"]
+    }
+  ]
+}

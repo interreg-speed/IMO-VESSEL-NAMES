@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.7"
+
+before_install:
+  - sudo apt-get update -y
+  - sudo apt-get install csvclean mdbtools gawk -y
+  - wget https://github.com/datopian/data-cli/releases/download/v0.9.5/data-linux.gz
+  - gunzip -f data-linux.gz
+  - chmod +x data-linux
+  - mv data-linux /usr/local/bin/data
+
+script:
+        - ./script/latest.py
+        - ./script/prepare.sh
+        - data push data
