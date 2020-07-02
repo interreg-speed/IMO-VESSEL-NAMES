@@ -9,7 +9,6 @@ before_install:
 script:
         - ./script/latest.py
         - ./script/prepare.sh
-        - `ls | grep *.mdb`
 
 before_deploy:
       # Set up git user name and tag this commit
