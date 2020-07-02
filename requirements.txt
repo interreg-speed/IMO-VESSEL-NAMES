@@ -1,3 +1,4 @@
 requests-html
 pandas
 numpy
+xlrd
