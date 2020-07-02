@@ -20,6 +20,7 @@ csvgrep -c 3 -r "^$" -i code-list.tmp.csv > code-list.tmp2.csv #remove country h
 
 (head -n 1 code-list.tmp2.csv && tail -n +2 code-list.tmp2.csv | LC_ALL=C sort -t, -k2,2  -k4,4 --ignore-case) > code-list.csv # sort data by locode
 
+ls -la
 mv code-list.csv data/code-list.csv
 mv mdb_CountryCodes_out.csv data/country-codes.csv
 mv mdb_FunctionClassifiers_out.csv data/function-classifiers.csv
