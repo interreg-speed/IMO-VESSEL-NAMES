@@ -4,7 +4,9 @@ python:
 
 before_install:
   - sudo apt-get update -y
-  - sudo apt-get install  csvkit mdbtools gawk -y
+  - sudo apt-get install python-dev python-pip python-setuptools build-essential
+  - sudo apt-get install  mdbtools gawk -y
+  - pip install csvkit
 
 script:
         - ./script/latest.py
