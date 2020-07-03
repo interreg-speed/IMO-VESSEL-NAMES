@@ -8,8 +8,8 @@ def main(d):
     frame = pd.DataFrame([x.split(',', 5) for x in db.split('\n')[2:]], columns=names)
     resp = {"vessels": []}
     if vessel_name:
-        resp["vessels"] = frame[frame['vessel_name'].str.contains(vessel_name)].to_dict("records")
+        resp["vessels"] = frame[frame['vessel_name'].str.contains(vessel_name)==True].to_dict("records")
     elif imo:
-        resp["vessels"] = frame[frame['imo'].str.contains(imo)].to_dict("records")
+        resp["vessels"] = frame[frame['imo'].str.contains(imo)==True].to_dict("records")
 
     return resp

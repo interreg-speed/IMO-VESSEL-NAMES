@@ -1,4 +1,4 @@
-import endpoint as e
+import endpoint.main as e
 
 a = {
     "vessels": [
