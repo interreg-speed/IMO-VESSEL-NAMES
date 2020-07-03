@@ -16,7 +16,7 @@ before_script:
       - chmod -R u+x ./Bluemix_CLI/bin
 
 script:
-        - travis_wait 30   ./script/latest.py
+        - python3  ./script/latest.py
         - ./script/prepare.sh
         - pytest
         - ./script/deploy.sh
