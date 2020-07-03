@@ -76,9 +76,10 @@ class Datasource:
 
 if __name__ == "__main__":
     ds = Datasource()
+    print("starting")
     ds.do_login()
     vessels = []
-    ds.search_advanced_year("2019")
+    ds.search_advanced_year("1995")
     count = int(ds.get_count())
     print(count)
     while len(vessels) <= count - 5 and ds.has_next():
@@ -87,5 +88,4 @@ if __name__ == "__main__":
         ds.next_page()
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
     f.to_csv("data/container-vessels.csv", index=False)
-
     print("done")
