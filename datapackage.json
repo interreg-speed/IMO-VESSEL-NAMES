@@ -1,6 +1,6 @@
 {
-  "name": "un-locode",
-  "title": "UN-LOCODE Codelist",
+  "name": "smdg-terminal-codes",
+  "title": "SMDG Terminal Codes",
   "version": "2020.1.0",
   "licenses": [
     {
@@ -11,149 +11,71 @@
   ],
   "sources": [
     {
-      "name": "UNECE",
-      "path": "http://www.unece.org/cefact/locode/welcome.html",
-      "title": "UNECE"
+      "name": "SMDG Terminal Code",
+      "path": "http://www.smdg.org",
+      "title": "SMDG"
     }
   ],
   "resources": [
     {
-      "path": "data/code-list.csv",
-      "name": "code-list",
+      "path": "data/SMDG-Terminal-Code-List-v20200701.csv",
+      "name": "smdg-terminal-codes",
       "mediatype": "text/csv",
       "schema": {
         "fields": [
           {
-            "name": "Change",
+            "name": "UNLOCODE",
             "type": "string",
-            "description": "+ (newly added); X (to be removed); | (changed); # (name changed); = (reference entry); ! (US location with duplicate IATA code)"
+            "description": "UN/Locode"
           },
           {
-            "name": "Country",
+            "name": "Alternative UNLOCODEs",
             "type": "string",
-            "description": "ISO 3166 alpha-2 Country Code, defined in countryCodes.csv",
-            "pattern": "[A-Z]{2}"
+            "description": "for areas with multiple unlocodes this would be an alternative"
           },
           {
-            "name": "Location",
+            "name": "Terminal Code",
             "type": "string",
-            "pattern": "[A-Z2-9]{3}"
+            "description": "terminal code as registered with SMDG"
           },
           {
-            "name": "Name",
+            "name": "Terminal Facility Name",
             "type": "string"
           },
           {
-            "name": "NameWoDiacritics",
+
+            "name": "Terminal Company Name",
             "type": "string"
           },
           {
-            "name": "Subdivision",
-            "type": "string",
-            "description": "Defined in subdivisionCodes.csv"
+            "name": "Latitude (DMS)",
+            "type": "string"
           },
           {
-            "name": "Status",
-            "type": "string",
-            "description": "Defined in statusIndicators.csv"
+            "name": "Longitude (DMS)",
+            "type": "string"
           },
           {
-            "name": "Function",
-            "type": "string",
-            "description": "Defined in functionClassifiers.csv",
-            "pattern": "[01-][2-][3-][4-][5-][6-][7-][B-]"
+            "name": "Last change",
+            "type": "string"
           },
           {
-            "name": "Date",
-            "type": "string",
-            "description": "ym",
-            "pattern": "[0-9]{4}"
+            "name": "Valid from",
+            "type": "string"
           },
           {
-            "name": "IATA",
-            "type": "string",
-            "description": "IATA code if different from LOCODE"
+            "name": "Valid until",
+            "type": "string"
           },
           {
-            "name": "Coordinates",
-            "type": "string",
-            "description": "DDMM[N/S] DDDMM[W/E]",
-            "pattern": "[0-9]{4}[NS] [0-9]{5}[WE]"
+            "name": "Terminal Website",
+            "type": "string"
+          },          {
+            "name": "Terminal Address",
+            "type": "string"
           },
           {
             "name": "Remarks",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "path": "data/country-codes.csv",
-      "name": "country-codes",
-      "mediatype": "text/csv",
-      "schema": {
-        "fields": [
-          {
-            "name": "CountryCode",
-            "type": "string"
-          },
-          {
-            "name": "CountryName",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "path": "data/function-classifiers.csv",
-      "name": "function-classifiers",
-      "mediatype": "text/csv",
-      "schema": {
-        "fields": [
-          {
-            "name": "FunctionCode",
-            "type": "string"
-          },
-          {
-            "name": "FunctionDescription",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "path": "data/status-indicators.csv",
-      "name": "status-indicators",
-      "mediatype": "text/csv",
-      "schema": {
-        "fields": [
-          {
-            "name": "STStatus",
-            "type": "string"
-          },
-          {
-            "name": "STDescription",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "path": "data/subdivision-codes.csv",
-      "name": "subdivision-codes",
-      "mediatype": "text/csv",
-      "schema": {
-        "fields": [
-          {
-            "name": "SUCountry",
-            "type": "string"
-          },
-          {
-            "name": "SUCode",
-            "type": "string"
-          },
-          {
-            "name": "SUName",
             "type": "string"
           }
         ]

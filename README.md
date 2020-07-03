@@ -3,5 +3,3 @@
 
 The repository contains the latest SMDG-TERMINAL-CODES information from the SMDG website. 
 http://www.smdg.org/smdg-code-lists/
-
- 
