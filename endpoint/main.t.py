@@ -1,18 +1,15 @@
 import pandas as pd
 
+
 def main(d):
-    unlocode = d.get("unlocode")
-    terminal_code = d.get("terminal_code")
-    names = ["unlocode","alternative","terminal_code",
-             "terminal_facility_name","terminal_company_name",
-             "latitude","longitude","last_change",
-             "valid_from","valid_until","terminal_website",
-             "terminal_address","remarks"]
-    frame = pd.DataFrame([x.split(',',12) for x in db.split('\n')[2:]],columns=names)
-    resp = {"locations":[]}
-    if unlocode:
-        resp["locations"] = frame[frame["unlocode"]==unlocode].to_dict("records")
-    elif terminal_code:
-        resp["locations"] =   frame[frame["terminal_code"]==terminal_code].to_dict("records")
+    imo = d.get("imo")
+    vessel_name = d.get("vessel_name")
+    names = ["imo", "vessel_name", "gross_tonnage", "type", "year_built", "flag"]
+    frame = pd.DataFrame([x.split(',', 5) for x in db.split('\n')[2:]], columns=names)
+    resp = {"vessels": []}
+    if vessel_name:
+        resp["vessels"] = frame[frame['vessel_name'].str.contains(vessel_name)].to_dict("records")
+    elif imo:
+        resp["vessels"] = frame[frame['imo'].str.contains(imo)].to_dict("records")
 
     return resp

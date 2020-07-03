@@ -1,15 +1,24 @@
 language: python
 python:
   - "3.7"
+
+addons:
+  chrome: stable
+
+before_install:
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - wget https://chromedriver.storage.googleapis.com/83.0.4103.39/chromedriver_linux64.zip
+  - unzip -o chromedriver_linux64.zip -d bin/
+  - export CHROME_BIN=chromium-browser
+
 before_script:
       - curl -L https://clis.ng.bluemix.net/download/bluemix-cli/latest/linux64 | tar -zx
       - chmod -R u+x ./Bluemix_CLI/bin
 
 script:
-        - ./script/latest-smdg.py
+        - ./script/latest.py
         - ./script/prepare.sh
         - ./script/deploy.sh
-
 
 before_deploy:
       # Set up git user name and tag this commit

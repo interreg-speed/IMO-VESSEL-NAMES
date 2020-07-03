@@ -1,6 +1,6 @@
 {
-  "name": "smdg-terminal-codes",
-  "title": "SMDG Terminal Codes",
+  "name": "imo-container-vessel-names",
+  "title": "IMO Container Vessel Names",
   "version": "2020.1.0",
   "licenses": [
     {
@@ -11,71 +11,44 @@
   ],
   "sources": [
     {
-      "name": "SMDG Terminal Code",
-      "path": "http://www.smdg.org",
-      "title": "SMDG"
+      "name": "IMO Vessel Database",
+      "path": "https://gisis.imo.org/Public/Default.aspx",
+      "title": "IMO - Global Integrated Shipping Information System"
     }
   ],
   "resources": [
     {
-      "path": "data/SMDG-Terminal-Code-List-v20200701.csv",
-      "name": "smdg-terminal-codes",
+      "path": "data/container-vessels.csv",
+      "name": "imo-container-vessel-names",
       "mediatype": "text/csv",
       "schema": {
         "fields": [
           {
-            "name": "UNLOCODE",
+            "name": "imo",
             "type": "string",
-            "description": "UN/Locode"
+            "description": "Vessel IMO or Lloyds number"
           },
           {
-            "name": "Alternative UNLOCODEs",
+            "name": "vessel name",
             "type": "string",
-            "description": "for areas with multiple unlocodes this would be an alternative"
+            "description": "the vessel name ie. ZIU FLORIDA"
           },
           {
-            "name": "Terminal Code",
-            "type": "string",
-            "description": "terminal code as registered with SMDG"
-          },
-          {
-            "name": "Terminal Facility Name",
+            "name": "gross tonnage",
             "type": "string"
+          },
+          {
+            "name": "vessel_type",
+            "type": "string",
+            "description": "Container Vessel"
           },
           {
 
-            "name": "Terminal Company Name",
+            "name": "year_built",
             "type": "string"
           },
           {
-            "name": "Latitude (DMS)",
-            "type": "string"
-          },
-          {
-            "name": "Longitude (DMS)",
-            "type": "string"
-          },
-          {
-            "name": "Last change",
-            "type": "string"
-          },
-          {
-            "name": "Valid from",
-            "type": "string"
-          },
-          {
-            "name": "Valid until",
-            "type": "string"
-          },
-          {
-            "name": "Terminal Website",
-            "type": "string"
-          },          {
-            "name": "Terminal Address",
-            "type": "string"
-          },
-          {
-            "name": "Remarks",
+            "name": "flag",
             "type": "string"
           }
         ]
