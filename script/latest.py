@@ -68,7 +68,7 @@ class Datasource:
         vessels = self.driver.find_elements_by_css_selector('#ShipResultId tr.hidden-sm')
         vs = []
         for item in vessels:
-            print(".",end='')
+            print("v")
             items = [i.text for i in item.find_elements_by_css_selector('th,td')]
             vs.append(items)
         return vs
