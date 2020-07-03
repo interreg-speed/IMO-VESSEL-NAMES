@@ -80,8 +80,9 @@ if __name__ == "__main__":
     ds.search_advanced_year("1995")
     count = int(ds.get_count())
     print(count)
+    print("")
     while len(vessels) <= count - 5 and ds.has_next():
-        print(".", end="")
+        print(".")
         vessels += ds.get_vessels()
         ds.next_page()
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
