@@ -14,6 +14,6 @@ if [ ${invocation_error} -eq 1 ]; then echo 'Something went wrong, check for pre
 # login and set target
 ./Bluemix_CLI/bin/ibmcloud config --check-version false
 ./Bluemix_CLI/bin/ibmcloud login -a $CF_API --apikey $APIKEY
-./Bluemix_CLI/bin/ibmcloud target --cf
+./Bluemix_CLI/bin/ibmcloud target -o $CF_ORG -s $CF_SPACE
 ./Bluemix_CLI/bin/ibmcloud plugin install cloud-functions -r Bluemix
 ./Bluemix_CLI/bin/ibmcloud fn action update smdg_code_lookup --kind python-jessie:3 ./endpoint/main.py
