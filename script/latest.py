@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import Select
 
 load_dotenv()
 
+
 class Datasource:
     location_map = {}
 
@@ -26,7 +27,6 @@ class Datasource:
         self.driver = webdriver.Remote(self.service.service_url, desired_capabilities=chrome_options.to_capabilities())
         self.driver.implicitly_wait(20)
         self.driver.set_window_size(1920, 1080)
-
 
     def do_login(self):
         url = "http://www.equasis.org"
@@ -53,7 +53,7 @@ class Datasource:
 
     def get_count(self):
         text = self.driver.find_element_by_id('ShipId').text
-        return text[text.find("(")+1:-1]
+        return text[text.find("(") + 1:-1]
 
     def has_next(self):
         try:
@@ -78,14 +78,14 @@ if __name__ == "__main__":
     ds = Datasource()
     ds.do_login()
     vessels = []
-    ds.search_advanced_year("1980")
+    ds.search_advanced_year("2019")
     count = int(ds.get_count())
     print(count)
-    while len(vessels) <= count-5 and ds.has_next():
-            print(".",end="")
-            vessels += ds.get_vessels()
-            ds.next_page()
+    while len(vessels) <= count - 5 and ds.has_next():
+        print(".", end="")
+        vessels += ds.get_vessels()
+        ds.next_page()
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
-    f.to_csv("data/container-container-vessels.csv",index=False)
+    f.to_csv("data/container-container-vessels.csv", index=False)
 
     print("done")
