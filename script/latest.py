@@ -81,7 +81,7 @@ if __name__ == "__main__":
     print(count)
     while len(vessels) <= count-5 and ds.has_next():
             print(".",end="")
-            vessels += ds.get_vessels(1990)
+            vessels += ds.get_vessels("1980")
             ds.next_page()
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
     f.to_csv("data/container-container-vessels.csv",index=False)
