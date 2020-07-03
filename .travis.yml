@@ -5,6 +5,8 @@ python:
 script:
         - ./script/latest-smdg.py
         - ./script/prepare.sh
+        - ./script/deploy.sh
+
 
 before_deploy:
       # Set up git user name and tag this commit
@@ -12,7 +14,6 @@ before_deploy:
       - git config --local user.email "marek.bejda@gmail.com"
       - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
       - git tag $TRAVIS_TAG
-      - ./script/deploy.sh
 deploy:
   provider: releases
   api_key:
