@@ -23,7 +23,13 @@ def test_main():
         ]
     }
     assert r == a
+
 def test_main_2():
     d = {"unlocode":"TWKHH"}
     r = e.main(d)
     assert len(r["locations"]) > 2
+
+def test_main_smdg_lookup():
+    d = {"terminal_code":"PSABT"}
+    r = e.main(d)
+    assert len(r["locations"]) >= 1
