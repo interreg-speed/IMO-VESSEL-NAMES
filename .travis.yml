@@ -16,10 +16,10 @@ before_script:
       - chmod -R u+x ./Bluemix_CLI/bin
 
 script:
-        - python3  ./script/latest.py
-        - ./script/prepare.sh
-        - pytest
-        - ./script/deploy.sh
+      - ./script/latest.py
+      - ./script/prepare.sh
+      - pytest
+      - ./script/deploy.sh
 
 before_deploy:
       # Set up git user name and tag this commit

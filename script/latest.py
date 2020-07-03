@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 
 import pandas as pd
@@ -67,6 +68,7 @@ class Datasource:
         vessels = self.driver.find_elements_by_css_selector('#ShipResultId tr.hidden-sm')
         vs = []
         for item in vessels:
+            print(".",end='')
             items = [i.text for i in item.find_elements_by_css_selector('th,td')]
             vs.append(items)
         return vs
@@ -75,16 +77,19 @@ class Datasource:
 if __name__ == "__main__":
     ds = Datasource()
     print("starting")
+    start_year = os.environ.get("START_YEAR","1995")
     ds.do_login()
     vessels = []
-    ds.search_advanced_year("1995")
+    ds.search_advanced_year(start_year)
     count = int(ds.get_count())
     print(count)
     print("")
     while len(vessels) <= count - 5 and ds.has_next():
-        print(".")
+        print("s")
         vessels += ds.get_vessels()
         ds.next_page()
+        print("n")
+
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
     f.to_csv("data/container-vessels.csv", index=False)
     print("done")
