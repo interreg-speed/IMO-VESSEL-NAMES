@@ -86,6 +86,6 @@ if __name__ == "__main__":
         vessels += ds.get_vessels()
         ds.next_page()
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
-    f.to_csv("data/container-container-vessels.csv", index=False)
+    f.to_csv("data/container-vessels.csv", index=False)
 
     print("done")
