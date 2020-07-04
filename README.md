@@ -18,4 +18,10 @@ The data can be downloaded in the [Releases section](https://github.com/marek505
 9338307,ACACIA LIBRA,9954,Container Ship,2007,"Hong Kong, China (HKG)"
 9270828,ACACIA MAKOTO,21932,Container Ship,2004,Singapore (SGP)
 9505522,ACACIA MING,7170,Container Ship,2010,Panama (PAN)
-9401697,ACACIA REI,18326,Container Ship,2010,Singapore (SGP)```
+9401697,ACACIA REI,18326,Container Ship,2010,Singapore (SGP)
+```
+
+
+Sources  
+http://www.equasis.org  
+https://gisis.imo.org  
