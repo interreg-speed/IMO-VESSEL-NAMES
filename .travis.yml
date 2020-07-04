@@ -36,4 +36,4 @@ deploy:
   file: data/*.csv
   skip_cleanup: true
   on:
-    branch: deploy
+    branch: master
