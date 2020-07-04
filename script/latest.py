@@ -9,6 +9,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
+import logging
+
 load_dotenv()
 
 
@@ -28,6 +30,7 @@ class Datasource:
         self.driver.set_window_size(1920, 1080)
 
     def do_login(self):
+        logging.info("do_login")
         url = "http://www.equasis.org"
         USERNAME = os.environ.get("USERNAME")
         PASSWORD = os.environ.get("PASSWORD")
@@ -39,6 +42,7 @@ class Datasource:
         return
 
     def search_advanced_year(self, year="2000"):
+        logging.info("grab from year %s", year)
         self.driver.find_element_by_id('advancedLink').click()
         self.driver.find_element_by_id('P_CatTypeShip_p3').click()
         select = Select(self.driver.find_element_by_id('P_CatTypeShip'))
@@ -51,8 +55,11 @@ class Datasource:
         self.driver.find_element_by_name('P_ENTREE_HOME').send_keys(Keys.RETURN)
 
     def get_count(self):
+        logging.info("get_count")
         text = self.driver.find_element_by_id('ShipId').text
-        return text[text.find("(") + 1:-1]
+        cnt = text[text.find("(") + 1:-1]
+        logging.info("get_count: %s", cnt)
+        return cnt
 
     def has_next(self):
         try:
@@ -65,10 +72,13 @@ class Datasource:
         self.driver.find_element_by_link_text(">").click()
 
     def get_vessels(self):
+        logging.info("get_vessels")
+
         vessels = self.driver.find_elements_by_css_selector('#ShipResultId tr.hidden-sm')
         vs = []
+        logging.info("found %d vessels", len(vessels))
         for item in vessels:
-            print("v")
+            print(".",end="")
             items = [i.text for i in item.find_elements_by_css_selector('th,td')]
             vs.append(items)
         return vs
@@ -76,20 +86,25 @@ class Datasource:
 
 if __name__ == "__main__":
     ds = Datasource()
-    print("starting")
+    # logging.basicConfig(filename='myapp.log', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+
+    logging.info('Started')
+
+
     start_year = os.environ.get("START_YEAR","1995")
     ds.do_login()
     vessels = []
     ds.search_advanced_year(start_year)
     count = int(ds.get_count())
-    print(count)
-    print("")
+    page = 1
     while len(vessels) <= count - 5 and ds.has_next():
-        print("s")
+        logging.info("starting page %s",page)
         vessels += ds.get_vessels()
         ds.next_page()
-        print("n")
+        page+=1
 
     f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
     f.to_csv("data/container-vessels.csv", index=False)
-    print("done")
+    logging.info('Finished')
+
