@@ -1,0 +1,39 @@
+language: python
+python:
+  - "3.7"
+
+addons:
+  chrome: stable
+
+before_install:
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - wget https://chromedriver.storage.googleapis.com/83.0.4103.39/chromedriver_linux64.zip
+  - unzip -o chromedriver_linux64.zip -d bin/
+  - export CHROME_BIN=chromium-browser
+
+before_script:
+      - curl -L https://clis.ng.bluemix.net/download/bluemix-cli/latest/linux64 | tar -zx
+      - chmod -R u+x ./Bluemix_CLI/bin
+
+script:
+      - echo Starting
+      - travis_wait 30  ./script/latest.py
+      - ./script/prepare.sh
+      - pytest
+      - ./script/deploy.sh
+
+before_deploy:
+      # Set up git user name and tag this commit
+      - git config --local user.name "Marek5050"
+      - git config --local user.email "marek.bejda@gmail.com"
+      - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+      - git tag $TRAVIS_TAG
+deploy:
+  provider: releases
+  api_key:
+    secure: "xMdz4Oz/fsXHbgaZYHN132hOT4Fcf3IbDs+T02pdo2KWojZIU5WKAcRQ1UPheFuyhFyr+D2okM4wYJfLrYXeEnYPCBkD8MJ6rygy/dx9fMY2V6rvYEsoHUujsDmwXIPlXoTlIX+LpZr4gGQBp4X5H35hPQkdBgmzfdkUA1aVYqcenogZGihzkBroRMuhOVEaFA7Xcn0ceePf902+H+oZ6PDkdwbuHcKlJ1mkrNx6zxx7Ck0SQID89tOm7xSSUABgluLYXrZ5VGRPqnysmnsW5G0FBrL/FPATK1K2B5pZc36fsKH0hmVDJdRxS2ZkJn0Th7uem69G+wzwud3PbuiyH8glJ9h+HcLEohMg1UL+O4fu26wmwunr9EOgBHubyTnT+Ld3W6w+mV24wAsYOsi93P+e2aLODEfHCbob+hybCQ1FKF4EL2MeXpvuSfR+06pEq4zS3VgI5Cxmhoqf5LaJvGt9eHWE160V5C/TcmKzu4422N7GnzjhN4d6gMin6SrITw3aw4TPbqpiASHQmkx24w5kXvTNOPMlOvPVPYVrUSuqSt+vN7Aj22WjySVThBdAW8HP0+S2YYtszbKzW91N3guzU5tHi0sNXCwKw1+eepqzqFEd49cY002DQSMf4qYSnetASp5aiVFwW6CdfsDokNQFrr7DCMO1fxYo+gKqz4s="
+  file_glob: true
+  file: data/*.csv
+  skip_cleanup: true
+  on:
+    branch: master
