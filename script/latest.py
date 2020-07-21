@@ -47,6 +47,8 @@ class Datasource:
         self.driver.find_element_by_id('P_CatTypeShip_p3').click()
         select = Select(self.driver.find_element_by_id('P_CatTypeShip'))
         select.select_by_value("3")
+        select.select_by_value("4")
+        select.select_by_value("5")
         self.driver.find_element_by_id('P_YB_GT').send_keys(year)
         self.driver.find_element_by_id('P_YB_GT').send_keys(Keys.RETURN)
 
