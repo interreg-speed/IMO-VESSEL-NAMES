@@ -24,7 +24,7 @@ class Datasource:
 
         chrome_options = Options()
         chrome_options.add_argument("window-size=1400,600")
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         self.driver = webdriver.Remote(self.service.service_url, desired_capabilities=chrome_options.to_capabilities())
         self.driver.implicitly_wait(20)
         self.driver.set_window_size(1920, 1080)
@@ -41,14 +41,16 @@ class Datasource:
         self.driver.find_element_by_id('home-password').send_keys(Keys.RETURN)
         return
 
-    def search_advanced_year(self, year="2000"):
+    def go_home(self):
+        self.driver.get("http://www.equasis.org/EquasisWeb/public/HomePage?fs=Search")
+        return
+
+    def search_advanced_year(self, year="2000", vessel_value="3"):
         logging.info("grab from year %s", year)
         self.driver.find_element_by_id('advancedLink').click()
         self.driver.find_element_by_id('P_CatTypeShip_p3').click()
         select = Select(self.driver.find_element_by_id('P_CatTypeShip'))
-        select.select_by_value("3")
-        select.select_by_value("4")
-        select.select_by_value("5")
+        select.select_by_value(vessel_value)
         self.driver.find_element_by_id('P_YB_GT').send_keys(year)
         self.driver.find_element_by_id('P_YB_GT').send_keys(Keys.RETURN)
 
@@ -57,10 +59,15 @@ class Datasource:
         self.driver.find_element_by_name('P_ENTREE_HOME').send_keys(Keys.RETURN)
 
     def get_count(self):
-        logging.info("get_count")
-        text = self.driver.find_element_by_id('ShipId').text
-        cnt = text[text.find("(") + 1:-1]
-        logging.info("get_count: %s", cnt)
+        cnt = 0
+        try:
+            logging.info("get_count")
+            text = self.driver.find_element_by_id('ShipId').text
+            cnt = text[text.find("(") + 1:-1]
+            logging.info("get_count: %s", cnt)
+        except Exception as e:
+            print(e)
+
         return cnt
 
     def has_next(self):
@@ -74,15 +81,20 @@ class Datasource:
         self.driver.find_element_by_link_text(">").click()
 
     def get_vessels(self):
-        logging.info("get_vessels")
-
-        vessels = self.driver.find_elements_by_css_selector('#ShipResultId tr.hidden-sm')
         vs = []
-        logging.info("found %d vessels", len(vessels))
-        for item in vessels:
-            print(".",end="")
-            items = [i.text for i in item.find_elements_by_css_selector('th,td')]
-            vs.append(items)
+        try:
+            logging.info("get_vessels")
+
+            vessels = self.driver.find_elements_by_css_selector('#ShipResultId tr.hidden-sm')
+            vs = []
+            logging.info("found %d vessels", len(vessels))
+            for item in vessels:
+                print(".",end="")
+                items = [i.text for i in item.find_elements_by_css_selector('th,td')]
+                vs.append(items)
+        except Exception as e:
+            print(e)
+        print(".")
         return vs
 
 
@@ -92,21 +104,24 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
     logging.info('Started')
+    vessel_types = {"5":["2010"]}
 
-
-    start_year = os.environ.get("START_YEAR","1995")
+    # start_year = os.environ.get("START_YEAR","2010")
     ds.do_login()
     vessels = []
-    ds.search_advanced_year(start_year)
-    count = int(ds.get_count())
-    page = 1
-    while len(vessels) <= count - 5 and ds.has_next():
-        logging.info("starting page %s",page)
-        vessels += ds.get_vessels()
-        ds.next_page()
-        page+=1
+    for vessel_type in vessel_types.keys():
+        for start_year in vessel_types[vessel_type]:
+            ds.search_advanced_year(start_year, vessel_type)
+            count = int(ds.get_count())
+            page = 1
+            while len(vessels) <= count - 5 and ds.has_next():
+                logging.info("starting page %s",page)
+                vessels += ds.get_vessels()
+                ds.next_page()
+                page+=1
 
-    f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
-    f.to_csv("data/container-vessels.csv", index=False)
-    logging.info('Finished')
+            f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
+            f.to_csv("data/%s-vessels.csv" % vessel_type, index=False)
+            logging.info('Finished - %s' % vessel_type)
+            ds.go_home()
 
