@@ -24,7 +24,7 @@ class Datasource:
 
         chrome_options = Options()
         chrome_options.add_argument("window-size=1400,600")
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
         self.driver = webdriver.Remote(self.service.service_url, desired_capabilities=chrome_options.to_capabilities())
         self.driver.implicitly_wait(20)
         self.driver.set_window_size(1920, 1080)
