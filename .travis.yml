@@ -17,9 +17,9 @@ before_script:
 
 script:
       - echo Starting
-      - travis_wait 30  ./script/latest.py 3
-      - travis_wait 30  ./script/latest.py 4
-      - travis_wait 30  ./script/latest.py 5
+      - travis_wait 40  ./script/latest.py 3
+      - travis_wait 40  ./script/latest.py 4
+      - travis_wait 40  ./script/latest.py 5
       - ./script/prepare.sh
       - pytest
       - ./script/deploy.sh
