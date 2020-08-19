@@ -108,8 +108,8 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
     logging.info('Started')
-    vessel_types = {"3": ["2000"],
-                    "4": ["2010"],
+    vessel_types = {"3": ["2003"],
+                    "4": ["2008"],
                     "5": ["2010"]}
 
     # start_year = os.environ.get("START_YEAR","2010")
