@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
+import sys
 
 import pandas as pd
 from chromedriver_py import binary_path
@@ -89,7 +90,7 @@ class Datasource:
             vs = []
             logging.info("found %d vessels", len(vessels))
             for item in vessels:
-                print(".",end="")
+                print(".", end="")
                 items = [i.text for i in item.find_elements_by_css_selector('th,td')]
                 vs.append(items)
         except Exception as e:
@@ -99,29 +100,32 @@ class Datasource:
 
 
 if __name__ == "__main__":
+    di = sys.argv[1:]
+    vessel_type = di[0]
+
     ds = Datasource()
     # logging.basicConfig(filename='myapp.log', level=logging.INFO)
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
     logging.info('Started')
-    vessel_types = {"5":["2010"]}
+    vessel_types = {"3": ["2000"],
+                    "4": ["2010"],
+                    "5": ["2010"]}
 
     # start_year = os.environ.get("START_YEAR","2010")
     ds.do_login()
     vessels = []
-    for vessel_type in vessel_types.keys():
-        for start_year in vessel_types[vessel_type]:
-            ds.search_advanced_year(start_year, vessel_type)
-            count = int(ds.get_count())
-            page = 1
-            while len(vessels) <= count - 5 and ds.has_next():
-                logging.info("starting page %s",page)
-                vessels += ds.get_vessels()
-                ds.next_page()
-                page+=1
+    for start_year in vessel_types[vessel_type]:
+        ds.search_advanced_year(start_year, vessel_type)
+        count = int(ds.get_count())
+        page = 1
+        while len(vessels) <= count - 5 and ds.has_next():
+            logging.info("starting page %s", page)
+            vessels += ds.get_vessels()
+            ds.next_page()
+            page += 1
 
-            f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
-            f.to_csv("data/%s-vessels.csv" % vessel_type, index=False)
-            logging.info('Finished - %s' % vessel_type)
-            ds.go_home()
-
+        f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
+        f.to_csv("data/%s-vessels.csv" % vessel_type, index=False)
+        logging.info('Finished - %s' % vessel_type)
+        ds.go_home()
