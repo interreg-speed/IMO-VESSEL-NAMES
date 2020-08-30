@@ -1,4 +1,9 @@
+import os
+
 import endpoint.main as e
+from dotenv import load_dotenv
+
+load_dotenv()
 
 a = {
     "vessels": [
@@ -11,17 +16,22 @@ a = {
     ]
 }
 
-def test_main():
-    d = {"imo":"9349667"}
-    r = e.main(d)
-    assert r == a
+# def test_main():
+#     d = {"imo":"9349667"}
+#     r = e.main(d)
+#     assert r == a
+#
+# def test_main_2():
+#     d = {"vessel_name":"ABYAN"}
+#     r = e.main(d)
+#     assert len(r["vessels"]) >= 1
 
-def test_main_2():
-    d = {"vessel_name":"ABYAN"}
+def test_main_3():
+    d = {"imo":"9343687", "url":  os.environ.get('MONGODB_URL') }
     r = e.main(d)
     assert len(r["vessels"]) >= 1
 
-def test_main_3():
-    d = {"vessel_name":"ABY"}
+def test_main_4():
+    d = {"vessel_name":"ABYAN", "url":  os.environ.get('MONGODB_URL') }
     r = e.main(d)
     assert len(r["vessels"]) >= 1

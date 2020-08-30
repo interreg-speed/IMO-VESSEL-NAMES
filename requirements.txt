@@ -10,4 +10,4 @@ chromedriver-py== 83.0.4103.39
 selenium==3.141.0
 python-dotenv==0.13.0
 pytest
-
+pymongo==3.8.0

@@ -11,6 +11,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
 import logging
+import pymongo
+import ssl
+import time
 
 load_dotenv()
 
@@ -25,10 +28,10 @@ class Datasource:
 
         chrome_options = Options()
         chrome_options.add_argument("window-size=1400,600")
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         self.driver = webdriver.Remote(self.service.service_url, desired_capabilities=chrome_options.to_capabilities())
         self.driver.implicitly_wait(20)
-        self.driver.set_window_size(1920, 1080)
+        # self.driver.set_window_size(1920, 1080)
 
     def do_login(self):
         logging.info("do_login")
@@ -46,14 +49,20 @@ class Datasource:
         self.driver.get("http://www.equasis.org/EquasisWeb/public/HomePage?fs=Search")
         return
 
-    def search_advanced_year(self, year="2000", vessel_value="3"):
-        logging.info("grab from year %s", year)
+    def search_advanced_year(self, start_year="2000",end_year="2001", vessel_type="3"):
+        logging.info("grab from start_year %s with end_year %s", start_year, end_year)
         self.driver.find_element_by_id('advancedLink').click()
+        # self.driver.find_element_by_id('advanced-search-toggle').click()
+        time.sleep(1)
         self.driver.find_element_by_id('P_CatTypeShip_p3').click()
         select = Select(self.driver.find_element_by_id('P_CatTypeShip'))
-        select.select_by_value(vessel_value)
-        self.driver.find_element_by_id('P_YB_GT').send_keys(year)
-        self.driver.find_element_by_id('P_YB_GT').send_keys(Keys.RETURN)
+        select.select_by_value(vessel_type)
+        self.driver.find_element_by_id('P_YB_GT').send_keys(start_year)
+        self.driver.find_element_by_id('P_YB_LT').send_keys(end_year)
+        time.sleep( 1 )
+        self.driver.find_element_by_id('buttonAdvSearch').click()
+        # self.driver.find_element_by_id('P_YB_GT').send_keys(Keys.RETURN)
+
 
     def search_by_name(self, name="MSC"):
         self.driver.find_element_by_name('P_ENTREE_HOME').send_keys(name)
@@ -99,6 +108,37 @@ class Datasource:
         return vs
 
 
+class MongoSave:
+    db = None
+    collection = None
+    def __init__(self):
+        MONGODB_URL = os.environ.get('MONGODB_URL')
+        client = pymongo.MongoClient(MONGODB_URL, ssl_cert_reqs=ssl.CERT_NONE)
+        self.db = client.get_database("oceandb")
+        # self.db.create_collection("vessels")
+        self.collection = self.db["vessels"]
+        print(self.db.list_collection_names())
+
+    def insert(self, vessel_list):
+        print("insert - %d" % len(vessel_list))
+        arrayed = [{
+                    "_id":v[0],
+                    "imo":v[0],
+                    "name":v[1],
+                    "size":v[2],
+                    "type":v[3],
+                    "built":v[4],
+                    "country":v[5]} for v in vessel_list]
+        for item in arrayed:
+            self.collection.replace_one({"_id":item["_id"]}, item,upsert=True)
+
+def home_and_search(start_year, end_year, vessel_type):
+    ds.go_home()
+    ds.search_advanced_year(start_year,end_year, vessel_type)
+    count = int(ds.get_count())
+    return count
+
+
 if __name__ == "__main__":
     di = sys.argv[1:]
     vessel_type = di[0]
@@ -108,24 +148,38 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
     logging.info('Started')
-    vessel_types = {"3": ["2003"],
-                    "4": ["2008"],
-                    "5": ["2010"]}
+    vessel_types = ["3","4","5"]
+    # [1; General Cargo Ships,5; Bulk Carriers, 3; Container Ships, 14; Fishing vessels, 7; Gas Tankers, 10; Offshore Vessels, 6; Oil and Chemical Tankers, 13; Other ships, 8; Other Tankers, 9; Passenger Ships, 4; Ro-Ro Cargo Ships, 11; Service Ships, 2; Specialized Cargo Ships, 12; Tugs]
+
+    ranges = [["1990","2000"],["2000","2005"],["2005","2010"],["2010","2015"],["2015","2020"] ]
+    # ranges = [["2005","2010"],["2010","2015"],["2015","2020"] ]
 
     # start_year = os.environ.get("START_YEAR","2010")
     ds.do_login()
     vessels = []
-    for start_year in vessel_types[vessel_type]:
-        ds.search_advanced_year(start_year, vessel_type)
-        count = int(ds.get_count())
-        page = 1
-        while len(vessels) <= count - 5 and ds.has_next():
-            logging.info("starting page %s", page)
-            vessels += ds.get_vessels()
-            ds.next_page()
-            page += 1
+    ms = MongoSave()
 
-        f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_build,flag".split(","))
-        f.to_csv("data/%s-vessels.csv" % vessel_type, index=False)
-        logging.info('Finished - %s' % vessel_type)
-        ds.go_home()
+    for year_range in ranges:
+        print("Year range: %s" % year_range)
+        try:
+            count = home_and_search(start_year=year_range[0], end_year=year_range[1], vessel_type=vessel_type)
+        except Exception as e:
+            print("E: failed once - %s" % e)
+            count = home_and_search(start_year=year_range[0], end_year=year_range[1], vessel_type=vessel_type)
+
+        page = 1
+        while True:
+            logging.info("starting page %s", page)
+            new_vessels = ds.get_vessels()
+            ms.insert(new_vessels)
+            vessels+=new_vessels
+            page += 1
+            if ds.has_next():
+                ds.next_page()
+            else:
+                break
+
+    f = pd.DataFrame(vessels, columns="imo,vessel_name,gross_tonnage,type,year_built,flag".split(","))
+    f.to_csv("data/%s-vessels.csv" % vessel_type, index=False)
+    logging.info('Finished - %s' % vessel_type)
+
