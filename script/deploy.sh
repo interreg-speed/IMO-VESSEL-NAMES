@@ -12,8 +12,8 @@ if [ -z ${CF_API+x} ]; then export CF_API='https://api.ng.bluemix.net'; fi
 if [ ${invocation_error} -eq 1 ]; then echo 'Something went wrong, check for previous errors.'; exit 1; fi
 
 # login and set target
-./Bluemix_CLI/bin/ibmcloud config --check-version false
-./Bluemix_CLI/bin/ibmcloud login -a $CF_API --apikey $APIKEY
-./Bluemix_CLI/bin/ibmcloud target -o $CF_ORG -s $CF_SPACE
-./Bluemix_CLI/bin/ibmcloud plugin install cloud-functions -r Bluemix
-./Bluemix_CLI/bin/ibmcloud fn action update imo_vessel_names --kind python-jessie:3 ./endpoint/main.py
+ibmcloud config --check-version false
+ibmcloud login -a $CF_API --apikey $APIKEY
+ibmcloud target -o $CF_ORG -s $CF_SPACE
+ibmcloud plugin install cloud-functions -r Bluemix
+ibmcloud fn action update imo_vessel_names --kind python-jessie:3 ./endpoint/main.py

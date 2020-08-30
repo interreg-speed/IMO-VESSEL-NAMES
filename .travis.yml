@@ -12,8 +12,7 @@ before_install:
   - export CHROME_BIN=chromium-browser
 
 before_script:
-      - curl -L https://clis.ng.bluemix.net/download/bluemix-cli/latest/linux64 | tar -zx
-      - chmod -R u+x ./Bluemix_CLI/bin
+      - curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 
 script:
       - echo Starting
