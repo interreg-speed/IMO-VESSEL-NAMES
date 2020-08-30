@@ -143,7 +143,7 @@ def home_and_search(start_year, end_year, vessel_type):
 if __name__ == "__main__":
     di = sys.argv[1:]
     vessel_type = di[0]
-    u_p = os.environ.get("u_p","NONE")
+    u_p = os.environ.get("U_P","NONE")
 
     ds = Datasource()
     # logging.basicConfig(filename='myapp.log', level=logging.INFO)
