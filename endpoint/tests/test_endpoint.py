@@ -27,11 +27,11 @@ a = {
 #     assert len(r["vessels"]) >= 1
 
 def test_main_3():
-    d = {"imo":"9343687", "url":  os.environ.get('MONGODB_URL') }
+    d = {"imo":"9343687", "u_p":  os.environ.get('U_P') }
     r = e.main(d)
     assert len(r["vessels"]) >= 1
 
 def test_main_4():
-    d = {"vessel_name":"ABYAN", "url":  os.environ.get('MONGODB_URL') }
+    d = {"vessel_name":"ABYAN", "u_p":  os.environ.get('U_P') }
     r = e.main(d)
     assert len(r["vessels"]) >= 1
