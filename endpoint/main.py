@@ -1,6 +1,5 @@
 import pymongo
 
-
 class MongoQuery:
     db = None
     collection = None
