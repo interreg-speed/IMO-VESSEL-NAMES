@@ -14,9 +14,7 @@ class MongoQuery:
         items = list(self.collection.find({"imo": {'$regex': imo} },{"_id":0}  ).limit(10))
         if len(items) == 0:
             items = list(self.collection.find({"name": {'$regex': name ,'$options': 'i'} }, {"_id":0}  ).limit(10))
-
         return items
-
 
 def main(d):
     imo = d.get("imo", "NONE")

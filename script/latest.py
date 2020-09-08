@@ -165,7 +165,7 @@ if __name__ == "__main__":
         try:
             count = home_and_search(start_year=year_range[0], end_year=year_range[1], vessel_type=vessel_type)
         except Exception as e:
-            print("E: failed once - %s" % e)
+            logging.info("E: failed once - %s", e)
             count = home_and_search(start_year=year_range[0], end_year=year_range[1], vessel_type=vessel_type)
 
         page = 1
