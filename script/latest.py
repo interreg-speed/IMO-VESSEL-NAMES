@@ -111,9 +111,10 @@ class Datasource:
 class MongoSave:
     db = None
     collection = None
-    def __init__(self):
-        MONGODB_URL = os.environ.get('MONGODB_URL')
-        client = pymongo.MongoClient(MONGODB_URL, ssl_cert_reqs=ssl.CERT_NONE)
+    uri = "mongodb://%s@oceans-shard-00-00.iotwb.mongodb.net:27017,oceans-shard-00-01.iotwb.mongodb.net:27017,oceans-shard-00-02.iotwb.mongodb.net:27017/oceandb?ssl=true&replicaSet=atlas-10a87j-shard-0&authSource=admin&retryWrites=true&w=majority"
+
+    def __init__(self,u_p):
+        client = pymongo.MongoClient(self.uri % (u_p), ssl_cert_reqs=ssl.CERT_NONE)
         self.db = client.get_database("oceandb")
         # self.db.create_collection("vessels")
         self.collection = self.db["vessels"]
@@ -142,6 +143,7 @@ def home_and_search(start_year, end_year, vessel_type):
 if __name__ == "__main__":
     di = sys.argv[1:]
     vessel_type = di[0]
+    u_p = os.environ.get("U_P","NONE")
 
     ds = Datasource()
     # logging.basicConfig(filename='myapp.log', level=logging.INFO)
@@ -154,17 +156,16 @@ if __name__ == "__main__":
     ranges = [["1990","2000"],["2000","2005"],["2005","2010"],["2010","2015"],["2015","2020"] ]
     # ranges = [["2005","2010"],["2010","2015"],["2015","2020"] ]
 
-    # start_year = os.environ.get("START_YEAR","2010")
     ds.do_login()
     vessels = []
-    ms = MongoSave()
+    ms = MongoSave(u_p)
 
     for year_range in ranges:
         print("Year range: %s" % year_range)
         try:
             count = home_and_search(start_year=year_range[0], end_year=year_range[1], vessel_type=vessel_type)
         except Exception as e:
-            print("E: failed once - %s" % e)
+            logging.info("E: failed once - %s", e)
             count = home_and_search(start_year=year_range[0], end_year=year_range[1], vessel_type=vessel_type)
 
         page = 1
